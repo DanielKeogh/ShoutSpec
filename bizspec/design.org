@@ -1,0 +1,133 @@
+# A design is something that gives enough information to overcome an obstacle to a desired effect.
+* DONE Summary/High Level Design
+# Probably only write here if you know what you want.
+** DONE Desired Effects
+*** DONE Mandatory
+# Consider any Negative Branches to the desired effects themselves and add additional desired effects. 
+# Also, if there are negative branches to anything within the design, add the desired effect that is being violated here.
+1. Specifications are clear for implementers.
+2. Specification writers get immediate feedback while they are writing.
+3. Writing specifications to templates is intuitive.
+4. It is obvious what areas of a specification are ambiguously defined. 
+5. Designs have enough detail that reviewers can identify design errors but not so much that it wastes time.
+
+*** DONE Optional
+# These are the cool things that mutliply the effectiveness of the design. 
+# "Doesn't have defects" should never go here, as defects prevent the user from using the product, rendering its value moot.
+1. Version control makes edits to designs obvious.
+2. Specifications can be converted into documentation.
+3. Algorithms/algorithmic rules can be implemented in specifications to give immediate feedback to spec writers.
+
+** DONE Assumptions
+# Here are beliefs that led to particular design decisions.
+1. Specifications will receive the minimum viable solution.
+2. It is not necessary to throw developers in the deep end for them to innovate.
+3. Desired effects are usually better than instructions.
+   Desired effects are better than instructions when they allow developers to innovate when there is a better solution than the one designed.
+   Instructions are better than desired effects when there is an obvious ideal solution (In the form of a pre-existing API/library that *perfectly* meets the needs of the solution or the design is for someone with no familiarity with an unituitive system.)
+4. Text is the best medium for speccing quickly.
+5. Breaking up the spec into pre-defined areas makes it easier to read.
+6. HTML is the best medium these days for CRUD.
+7. Javascript makes me sad.
+8. Can't just use OrgMode. Don't know why. It's been delightful.
+
+** DONE Intermediate Objectives
+# This is a good place to describe what you believe to be the best candidate solution to your problem.
++ Design and build a website that enables quickly writing up specifications.
++ Create a list of categories for data that can be in a spec.
++ Use the system in a public and compelling manner, so onlookers feel like they will be advantaged by using it.
+
+* TODO Design/DetailedBuildDesign
+# This is a good place to write a lot of things.
+# The headings here become pretty arbitary because different designs have different needs
+# i.e. Some designs are very UX centric, and others are algorithm centric.
+** DONE Terms
+# Here would be a good place to flesh out definitions of ideas that nobody is familar with.
++ Product Name: ShoutSpecs (teehee)
++ Web Control: The part of the GUI that renders the design
+
+** DONE Thoughts
+*** DONE Brainstorm List
+# This is where I've put some thought into some candidate categories/sub headings that someone might need in a DBD
++ Data structure 
+  This is necessary because datastructure design greatly influences the implmentation.
++ Rule
+  This is something that performs a transformation on datastructures. It allows designers
++ User Input
+  An action the user can take, that maps to a rule and a user output. This makes all inputs explicit, which identifies gaps in the spec.
++ User Output
+  This is important so the implementor can see how the injections DE's describe should appear.
++ Assumption
+  This lets the designer skip over areas of the design that are oxygen.
++ Condition tree
+  This is necessary so writers can understand if conditions are in conflict.
++ Algorithm
+  This is a collection of condition tree's and rules that apply in a sequence.
++ Term
+  This allows spec designs to devise new types of thing that can be used in their specs.
++ Explanation
+  Maybe these can be aggregated into user documentation later?
++ Comment
+  Is this an explanation?
+
+*** TODO My thoughts on categories: 
+
+** Appearence/Wireframe/Features
+# I'd probably put a screenshot here of what done looks like.
+*** Web Control
+**** DONE Explanation:
+# Explaining the order of chunks can act as a reminder of what infrastructure is necessary.
+The key to making this viral is making the flow of design as rapid as possible. 
+This is the most important part of this project in the long term for its viability, 
+and all storage mechanisms will effectively be serialising this datastructure,
+so this is a prereq to everything else.
+
+**** DONE Desired Outcomes:
++ There is a HTML page with text boxes representing different sub-sections of a detailed design
++ Moving between text boxes feels natural
++ Text-boxes have a tree like structure.
++ Inserting empty text boxes is easy.
++ Removing unused text boxes is automatic and not confusing.
+
+*** TODO Serialisation and parsing
+**** Desired Outcomes
++ The Web Control can be parsed
+
+*** TODO Internal References
+**** Desired Outcomes
++ It is possible to link together different 
+
+*** TODO External References
+**** Desired Outcomes
++ It is possible to link external documents
+
+*** TODO Rendering
+**** Desired Outcomes
++ Multiple document types can be rendered from a design\
+
+** Algorithms
+*** Rendering/Parsing
+# Below are some data requirements for rendering and parsing. Note that this is segregated away so people can ignore it.
+Lines beginning with * or + are headings. 
+The number of **'s indicates the childlyness of the heading. 
+ie.
+;* I'm a Heading
+;** I'm a SubHeading to "I'm a Heading"
+Have  an  escape character for when the user enters * in their designs. ; seems ok.
+
+The advantage of this, is that this means the document can be edited outside of the mystical editor, so hippies can use it.
+When serialising, serialise into a tree like data structure where nodes have references to their parents. 
+Each node has a Parent, text and N children.
+
+Store all text in strings as this will save memory. 
+The active node can be a string buffer, that gets commited when the user moves away from it. Does javascript even  have string buffers?
+Store an index number on each node because later on we will want to be able to deal with HUGE text files, and this acts as a stub for when we want to do this.
+
+* TODO Chunks
+# It would be a bad decision to do this before the design has be reviewed.
+** Chunk 1: Design and prototype a category web control.
+*** TODO Completion Statements:
+** Chunk 2: Serialisation and parsing
+*** TODO Completion statements:
+** Chunk 3: Templating
+*** TODO Completion statements:

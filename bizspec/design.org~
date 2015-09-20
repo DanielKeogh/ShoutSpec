@@ -1,0 +1,63 @@
+* Summary
+** Desired Effects
+*** Mandatory
+1. Specifications are clear for implementers.
+2. Specification writers get immediate feedback while they are writing.
+3. Writing specifications to templates is intuitive.
+4. It is obvious what areas of a specification are ambiguously defined. 
+
+*** Optional
+1. Specifications can be converted into documentation.
+2. Algorithms/algorithmic rules can be implemented in specifications to give immediate feedback to spec writers.
+
+** Assumptions
+1. Specifications will receive the minimum viable solution.
+2. It is not necessary to throw developers in the deep end for them to innovate.
+3. Desired effects are better than instructions.
+   Desired effects are better than instructions when they allow developers to innovate when there is a better solution than the one designed.
+   Instructions are better than desired effects when
+4. Text is the best medium for speccing quickly.
+5. Breaking up the spec into pre-defined areas makes it easier to read.
+6. HTML is the best medium for CRUD.
+7. Javascript hurts me in my special place.
+
+** Intermediate Objectives
+1. Design and build a site that enables quickly writing up specifications.
+2. Create a list of categories for data that can be in a spec.
+
+* Design
+** Terms
++ Product Name: ShoutSpecs (lol)
+
+** Categories
+*** Brainstorm List
++ Desired Effect
+  This is the key to allowing innovation by implementers, and clarifying why decisions have been made.
++ Data structure 
+  This is necessary because datastructure design greatly influences the implmentation.
++ Rule
+  This is something that performs a transformation on datastructures. It allows designers
++ User Input
+  An action the user can take, that maps to a rule and a user output. This makes all inputs explicit, which identifies gaps in the spec.
++ User Output
+  This is important so the implementor can see how the injections DE's describe should appear.
++ Assumption
+  This lets the designer skip over areas of the design that are oxygen.
++ Condition tree
+  This is necessary so writers can understand if conditions are in conflict.
++ Algorithm
+  This is a collection of condition tree's and rules that apply in a sequence.
++ Term
+  This allows spec designs to devise new types of thing that can be used in their specs.
++ Explanation
+  Maybe these can be aggregated into user documentation later?
++ Comment
+  Is this an explanation?
+
+*** Thoughts on categories: 
+** Appearence
+*** Requirements
++ Web page
++ Clean
++ Hides clutter
++ Classy colour scheme. (Blue and white)

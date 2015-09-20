@@ -1,0 +1,33 @@
+
+
+body {
+    background: white;
+    padding-top:65px;
+}
+
+.defblock {
+    display: flex;
+    flex-direction: row;
+}
+
+.ilinetoken {
+    float: left;
+}
+
+.ilinewrapper {
+}
+
+input[type="text"] {
+    flex: 1;
+    box-shadow: none;
+    border-radius: none;
+    border: none;
+    outline: black;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+}
+
+.didja input[type="text"] {
+    color: blue;
+}

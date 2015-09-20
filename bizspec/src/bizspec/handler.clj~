@@ -1,0 +1,54 @@
+(ns bizspec.handler
+  (:require [compojure.core :refer :all]
+            [compojure.route :as route]
+            [ring.middleware.params :as params]
+            [hiccup.page :as hpage]))
+
+;; Pages
+
+(defn home []
+  (hpage/html5 [:head
+                [:title "bizSpec"]
+                [:meta {:charset "utf-8"}]
+                [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0"}]
+                [:meta {:name "description" :content ""}]
+                [:meta {:name "author" :content ""}]
+                [:link {:rel "stylesheet" :type "text/css" :href "style.css"}]
+                [:link {:rel "stylesheet" :type "text/css" :href "bootstrap.min.css"}]]
+               
+               [:body
+                [:nav {:class "navbar navbar-inverse navbar-fixed-top"}
+                 [:div {:class "container"}
+                  [:button {:class "navbar-toggle collapsed" :data-toggle "collapse" :data-target "#navbar"
+                            :aria-expanded "false" :aria-controls "navbar"}
+                   [:span {:class "sr-only"} "Toggle navigation"]
+                   [:span {:class "icon-bar"}]
+                   [:span {:class "icon-bar"}]
+                   [:span {:class "icon-bar"}]]
+                  [:div {:class "navbar-header"}
+                   [:a {:class "navbar-brand" :href "#"} "ShoutSpec"]]
+                  [:div {:id "navbar" :class "collapse navbar-collapse"}
+                   [:ul {:class "nav navbar-nav"}
+                    [:li {:class "active"} [:a {:href "#"} "Home"]]
+                    [:li [:a {:href "#"} "Nerp"]]]]]]
+
+                [:div.container
+                 [:div#bizspeccontent]]
+                (hpage/include-js "/goog/base.js")
+                (hpage/include-js "/main.js")
+                [:script {:type "text/javascript" :src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"}]
+                [:script {:type "text/javascript"} "goog.require(\"bizspec.design\");"]
+
+                ]
+               ))
+
+;; Routes
+
+(defroutes app-routes
+  (GET "/" [] (home))
+  (route/resources "/")
+  (route/not-found "Not Found"))
+
+(def app
+  (params/wrap-params app-routes))
+

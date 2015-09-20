@@ -1,0 +1,167 @@
+(ns bizspec.design 
+  (:require-macros [hiccups.core :as hiccups])
+  (:require [hiccups.runtime :as hiccupsrt]))
+
+(def that-fucky-char " ")
+
+(enable-console-print!)
+(println "Console enabled for debugging")
+
+(println "Defining valid data creation functions")
+
+(defn create-title-list [name]
+  {:name name :children {} :type "title-list"})
+
+(println "Defining Atoms")
+
+(def items (atom {[0] (create-title-list "Desired Effects")}))
+
+(def selected-item (atom [0 -1]))
+
+(def current-id (atom 0))
+
+(println "Defining Functions for keyboard interations")
+
+(defn get-root-active []
+  (.-parentNode (.-activeElement js/document)))
+
+(defn get-block-depth [element]
+  (reduce (fn [agr new]
+            (if (= new that-fucky-char) 
+              (inc agr) agr)) 
+          (into [0] (.-innerHTML element))))
+
+(defn get-new-id [id]
+  (let [new-id @current-id]
+    (swap! current-id inc)
+    new-id))
+
+(defn key-focus-block [main id]
+  (.focus (.getElementById js/document id)))
+
+(defn create-defblock [name parent-chain depth]
+  (render-defblock name parent-chain depth ""))
+
+(defn render-defblock [name parent-chain depth content]
+  [:span {:class "defblock didja"} 
+   [:span {:class "ilinetoken"} (str (apply str (repeat depth that-fucky-char)) "•")] 
+   [:input {:class "iline" :type "text" :id parent-chain :value content} ]])
+
+(defn get-element [parent element-name]
+  (first (array-seq (.getElementsByClassName parent element-name))))
+
+(defn get-active-element [element-name]
+  (let [parent (get-root-active)]
+    (if parent
+      (get-element parent element-name)
+      (println "parent not found"))
+    ))
+
+(defn keyboard-untab [main]
+  (let [active (get-active-element "ilinetoken")]
+    (when (and active (.startsWith (.-innerHTML active) that-fucky-char)) 
+      (set! (.-innerHTML active) (subs (.-innerHTML active) 1)))))
+
+(defn keyboard-tab [main]
+  (let [active (get-active-element "ilinetoken")]
+    (when active 
+      (set! (.-innerHTML active) (str "&emsp;" (.-innerHTML active))))))
+
+(defn keyboard-enter [main]
+  (let [active (get-root-active)
+        depth (get-block-depth (get-active-element "ilinetoken"))
+        id (.-id active)
+        new-id (get-new-id id)
+        block (hiccups/html (create-defblock "desu" new-id depth))]
+    (println depth)
+    (.insertAdjacentHTML active "afterend" block)
+    (swap! items assoc :nodes (cons (:nodes @items) block))
+    (key-focus-block main new-id)))
+
+(defn move-focus-up [main]
+  (let [parent (get-root-active)
+        previous (.-previousElementSibling parent)]
+    (if previous
+      (let [child (first (array-seq (.getElementsByClassName previous "iline")))]
+        (if child
+          (.focus child)
+          (println (str "No child focus for" previous " + " child))))
+      (println (str "Cannot focus on" (or previous "null"))))))
+
+(defn keyboard-backspace [main]
+  (or (let [parent (get-root-active)
+            previous (when parent (get-element (.-previousElementSibling parent) "iline"))]
+        (when previous
+          (let [active (.-activeElement js/document)
+                selection-start (.-selectionStart active)
+                selection-end (.-selectionEnd active)
+                previous-value (.-value previous)]
+            (when (and (= selection-start selection-end) 
+                       (= selection-start 0))
+              (set! (.-value previous) (str previous-value (.-value active)))
+              (.focus previous)
+              (set! (.-selectionStart previous) (count previous-value))
+              (set! (.-selectionEnd previous) (count previous-value))
+              (.removeChild (.-parentNode parent) parent)))))
+      :dontPreventDefault))
+
+(defn move-focus-down [main]
+  (let [parent (get-root-active)
+        next (.-nextElementSibling parent)]
+    (if next
+      (let [child (first (array-seq (.getElementsByClassName next "iline")))]
+        (if child
+          (.focus child)
+          (println (str "No child focus for" next " + " child))))
+      (println (str "Cannot focus on" (or next "null"))))))
+
+(defn handle-press [key main event]
+  (if (.-shiftKey event)
+    (cond 
+     (= key 9) (keyboard-untab main)
+     :else :dontPreventDefault)
+    (cond
+     (= key 9) (keyboard-tab main)  ; Tab
+     (= key 13) (keyboard-enter main) ; Enter
+     (= key 38) (move-focus-up main)  ; Up arrow
+     (= key 40) (move-focus-down main) ; Down arrow
+     (= key 8) (keyboard-backspace main) ; Down arrow
+     :else :dontPreventDefault)))
+
+(defn create-key-handler [main]
+  (fn [event] 
+    (when (not (= (handle-press (.-keyCode event) main event) :dontPreventDefault))
+      (.preventDefault event))
+    (println (str "down " key))))
+
+
+(println "Defining Fucntions for templating")
+
+(def sample-template 
+  ["desired effects"
+   [""]
+   "undesired effects"
+   [""]])
+
+(defn render-template [template depth]
+  (cond 
+   (string? template) (render-defblock "Boo" "none" depth template)
+   (seq template) (map #(render-template % (inc depth)) template)
+   :else (println (str "unrecognised syntax: " template))))
+    
+(println "Hooking up html")
+
+(let [main (.getElementById js/document "bizspeccontent")]
+  (set! (.-innerHTML main) ">_ ")
+  (.appendChild main (.createTextNode js/document "Now starting your specification."))
+  
+  (doall (for [x (render-template sample-template -1)]
+           (let [html (hiccups/html x)]
+             (println html)
+             (.insertAdjacentHTML main "beforeend" html))
+           ))
+
+  (.insertAdjacentHTML main "beforeend" (hiccups/html (create-defblock "Boo" "none" 0)))
+  (set! (.-onkeypress js/document) (create-key-handler [main])))
+
+(println "Hooks complete 2")
